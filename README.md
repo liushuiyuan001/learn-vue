@@ -1,2 +1,2 @@
 # learn-vue
-vue学习练习
+vue学习
