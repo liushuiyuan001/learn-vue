@@ -5,9 +5,9 @@ export function render(box, map) {
 }
 
 function reset(map) {
-	for(let i = 0; i < gameRow; i++) {
-		for(let j = 0; j < gameCol; j++) {
-			if(map[i][j] > 0) {
+	for (let i = 0; i < gameRow; i++) {
+		for (let j = 0; j < gameCol; j++) {
+			if (map[i][j] > 0) {
 				map[i][j] = 0
 			}
 		}
@@ -20,7 +20,9 @@ function _render(box, map) {
 		for (let j = 0; j < col; j++) {
 			const x = box.y + i
 			const y = box.x + j
-			map[x][y] = 1 // color 
+			if (box.shape[i][j] > 0) {
+				map[x][y] = 1 // color 
+			}
 		}
 	}
 }

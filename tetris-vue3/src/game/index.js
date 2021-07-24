@@ -1,43 +1,50 @@
 export * from './config.js'
 import { gameRow, gameCol } from './config.js'
+import { createBox } from './box'
 import { render } from './renderer.js'
-import { initMap } from './map.js'
+import { initMap, addBoxToMap, eliminate } from './map.js'
 import { addTicker } from './ticker'
 import { intervalTimer } from './utils'
-import { hitBorder } from './hit'
+import { hitBottomBorder, hitBottomBox } from './hit'
 export function startGame(map) {
-	const box = {
-		x: 0,
-		y: 0,
-		shape: [
-			[1,1],
-			[1,1]
-		]
-	}
-	
-	initMap(map)
-	render(box, map)
 
-    const isDownMove = intervalTimer()
+	initMap(map)
+
+	const isDownMove = intervalTimer()
+	let activeBox = createBox()
 
 	function handleTicker(n) {
-		if(isDownMove(n,1000) && !hitBorder(box)) {
-		   box.y++;
-		   render(box, map)	
+		if (isDownMove(n, 1000)) {
+			if (hitBottomBorder(activeBox) || hitBottomBox(activeBox, map)) {
+				addBoxToMap(activeBox, map)
+				activeBox = createBox()
+				eliminate(map)
+				return
+			}
+			activeBox.y++;
 		}
+		render(activeBox, map)
 	}
-    addTicker(handleTicker)
-	
-	window.addEventListener('keydown',(e) => {
-		if(e.code === 'ArrowDown') {
-			box.y++;
-			render(box, map)
+
+	window.addEventListener('keydown', (e) => {
+		switch (e.code) {
+			case 'ArrowLeft':
+				activeBox.x--;
+				break;
+			case 'ArrowRight':
+				activeBox.x++;
+				break;
+			case 'ArrowDown':
+				activeBox.y++;
+				break;
+			case 'Space':
+				activeBox.rotate()
+				break;
+			default:
+				break;
 		}
 	})
 
-	// setInterval(() =>{
-	// 	box.y++
-	// 	render(box, map)
-	// },1000)
-	
+	addTicker(handleTicker)
+
 }

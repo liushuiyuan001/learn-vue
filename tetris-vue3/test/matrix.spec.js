@@ -1,24 +1,32 @@
-import { getBoxBottomPoints } from '../src/game/matrix';
+import { getBoxBottomPoints, rotate } from '../src/game/matrix';
 
 test('获取 maxtrix 底部的所有点', () => {
-	const box = {
-		x: 0,
-		y: 5,
-		shape: [
-			[1,1],
-			[1,1]
-		]
-	}
+	const matrix = [
+		[0, 1, 0],
+		[1, 1, 0],
+		[1, 0, 0]
+	]
 
-	const points = getBoxBottomPoints(box.shape, {x: box.x, y: box.y});
+	const points = getBoxBottomPoints(matrix);
 	expect(points).toEqual([
 		{
 			x: 0,
-			y: 6
-		},
-		{
-			x: 1,
-			y: 6
+			y: 2
 		}
+	])
+})
+
+test('rotate', () => {
+	// 逆时针90度
+	const matrix = [
+		[1, 0, 0],
+		[1, 1, 0],
+		[0, 1, 0]
+	]
+	rotate(matrix)
+	expect(rotate(matrix)).toEqual([
+		[0, 0, 0],
+		[0, 1, 1],
+		[1, 1, 0]
 	])
 })

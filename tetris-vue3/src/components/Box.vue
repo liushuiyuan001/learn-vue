@@ -8,6 +8,7 @@ import { computed } from 'vue'
 const props = defineProps(['type'])
 
 const typeToColorMap = {
+	[-1]: 'red',
 	[0] : 'gray',
 	[1] : 'red'
 }
