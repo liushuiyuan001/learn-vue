@@ -1,11 +1,17 @@
 <template>
-  <div>
-	  <Game></Game>
+  <div style="display:flex;">
+	  <Game type="self"></Game>
+	  <Game type="rival"></Game>
+	  <button @click="handleSartGame">startGame</button>
   </div>
 </template>
 
 <script setup>
 import Game from './components/Game.vue'
+import { startGame } from './game/index'
+function handleSartGame() {
+	startGame()
+}
 </script>
 
 <style>

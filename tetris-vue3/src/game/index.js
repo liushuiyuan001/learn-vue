@@ -1,50 +1,26 @@
 export * from './config.js'
-import { gameRow, gameCol } from './config.js'
-import { createBox } from './box'
-import { render } from './renderer.js'
-import { initMap, addBoxToMap, eliminate } from './map.js'
-import { addTicker } from './ticker'
-import { intervalTimer } from './utils'
-import { hitBottomBorder, hitBottomBox } from './hit'
-export function startGame(map) {
+import { Game } from './game'
+import { Player } from './player'
+import { Rival } from './rival'
+import { initMessage } from './message'
 
-	initMap(map)
+export function initGame() {
+	initMessage()
+}
 
-	const isDownMove = intervalTimer()
-	let activeBox = createBox()
+let selftGame
+export function initSelfGame(map) {
+	selftGame = new Game(map)
+	selftGame.addPlayer(new Player())
+}
 
-	function handleTicker(n) {
-		if (isDownMove(n, 1000)) {
-			if (hitBottomBorder(activeBox) || hitBottomBox(activeBox, map)) {
-				addBoxToMap(activeBox, map)
-				activeBox = createBox()
-				eliminate(map)
-				return
-			}
-			activeBox.y++;
-		}
-		render(activeBox, map)
-	}
+let rivalGame
+export function initRivalGame(map) {
+	rivalGame = new Game(map)
+	rivalGame.addPlayer(new Rival())
+}
 
-	window.addEventListener('keydown', (e) => {
-		switch (e.code) {
-			case 'ArrowLeft':
-				activeBox.x--;
-				break;
-			case 'ArrowRight':
-				activeBox.x++;
-				break;
-			case 'ArrowDown':
-				activeBox.y++;
-				break;
-			case 'Space':
-				activeBox.rotate()
-				break;
-			default:
-				break;
-		}
-	})
-
-	addTicker(handleTicker)
-
+export function startGame() {
+	selftGame.start()
+	rivalGame.start()
 }

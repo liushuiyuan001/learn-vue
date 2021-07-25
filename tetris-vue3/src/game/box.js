@@ -70,7 +70,7 @@ export function createBox() {
 
 function getRandomBoxInfo() {
 	const max = Object.keys(boxInfos).length
-	const key = Math.floor(Math.random() * max) + 1;
-	// const key = 2
+	// const key = Math.floor(Math.random() * max) + 1;
+	const key = 2
 	return boxInfos[key];
 }

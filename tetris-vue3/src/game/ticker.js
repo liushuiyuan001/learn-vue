@@ -1,6 +1,6 @@
 let startTime = Date.now();
 function handleTicker() {
-    tickers.forEach((ticker) => {
+	tickers.forEach((ticker) => {
 		ticker(Date.now() - startTime);
 	})
 
