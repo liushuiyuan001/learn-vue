@@ -22,5 +22,4 @@ export function initRivalGame(map) {
 
 export function startGame() {
 	selftGame.start()
-	rivalGame.start()
 }

@@ -18,9 +18,14 @@ export class Game {
 		player.init(this)
 	}
 
+	_createBoxStrategy = null
 	start() {
-		this._activeBox = createBox()
+		this._activeBox = this._createBoxStrategy()
 		addTicker(this.handleTicker.bind(this))
+	}
+
+	setCreateStrategy(strategy) {
+		this._createBoxStrategy = strategy;
 	}
 
 	_isDownMove = intervalTimer()
@@ -36,13 +41,13 @@ export class Game {
 	}
 
 	moveBoxToDown() {
-		if (!this._activeBox) {
-			return
-		}
+		// if (!this._activeBox) {
+		// 	return
+		// }
 		if (hitBottomBorder(this._activeBox) || hitBottomBox(this._activeBox, this._map)) {
 			addBoxToMap(this._activeBox, this._map)
 			eliminate(this._map)
-			this._activeBox = createBox()
+			this._activeBox = this._createBoxStrategy()
 			return
 		}
 		this._activeBox.y++;

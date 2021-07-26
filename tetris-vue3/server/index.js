@@ -15,23 +15,32 @@ io.on('connection', (socket) => {
 
 	socket.on('moveBoxToLeft', () => {
 		console.log('left')
-		//socket.broadcast 
+		// io.emit("moveBoxToLeft")
 		socket.broadcast.emit("moveBoxToLeft")
 	})
 
 	socket.on('moveBoxToRight', () => {
 		console.log('right')
+		// io.emit("moveBoxToRight")
 		socket.broadcast.emit("moveBoxToRight")
 	})
 
 	socket.on('moveBoxToDown', () => {
 		console.log('down')
+		// io.emit("moveBoxToDown")
 		socket.broadcast.emit("moveBoxToDown")
 	})
 
 	socket.on('rotateBox', () => {
 		console.log('rotateBox')
+		// io.emit("rotateBox")
 		socket.broadcast.emit("rotateBox")
+	})
+
+	socket.on('createBox', (info) => {
+		console.log('createBox')
+		// io.emit("createBox", info)
+		socket.broadcast.emit("createBox", info)
 	})
 });
 server.listen(3001);

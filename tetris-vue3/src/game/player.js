@@ -1,11 +1,18 @@
 import { message } from './message'
+import { createBox } from './box'
 export class Player {
 	constructor() {
 		this._game = null
 	}
 	init(game) {
 		this._game = game;
+		this._game.setCreateStrategy(this.handleCreateBox.bind(this))
 		window.addEventListener("keydown", this.handleKeydown.bind(this))
+	}
+	handleCreateBox() {
+		const box = createBox()
+		message.emit('createBox', { type: box.type })
+		return box
 	}
 	handleKeydown(e) {
 		switch (e.code) {
