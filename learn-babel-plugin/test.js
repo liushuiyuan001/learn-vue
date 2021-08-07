@@ -15,7 +15,9 @@ const code = `
 `
 
 const babelConfig = {
-	plugins: ['./index.js']
+	plugins: ['./index.js', {
+		isRemoved: true
+	}]
 }
 const output = transformSync(code, babelConfig)
 console.log(output)

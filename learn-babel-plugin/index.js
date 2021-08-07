@@ -14,12 +14,16 @@ module.exports = ({ types: t }) => {
 				}
 			},
 
-			StringLiteral(path) {
+			StringLiteral(path, state) {
 				const parentIsIf = t.isIfStatement(path.parentPath)
 				const name = path.node.value
 				const isDebug = name === 'DEBUG'
 				if (isDebug && parentIsIf) {
-					path.parentPath.remove()
+					// 控制在 prod 下 才能移除
+					console.log(state)
+					if (process.env.NODE_ENV === 'production') {
+						path.parentPath.remove()
+					}
 				}
 			}
 		}
