@@ -1,83 +1,56 @@
 
 import React from 'react';
-import ReactDOM from 'react-dom';
 import 'antd/dist/antd.css';
 import './index.css';
-import { Form, Icon, Input, Button } from 'antd';
-
-function hasErrors(fieldsError) {
-	return Object.keys(fieldsError).some(field => fieldsError[field]);
-}
+import { Select } from 'antd';
+const { Option } = Select;
 
 class HorizontalLoginForm extends React.Component {
+
+	state = {
+		// 从接口中取值
+		names: ''
+	}
+
 	componentDidMount() {
-		// To disable submit button at the beginning.
-		this.props.form.validateFields();
+		setTimeout(() => {
+			this.setState({ names: 'zs,ls' })
+		}, 2000)
 	}
 
-	handleSubmit = e => {
-		e.preventDefault();
-		this.props.form.validateFields((err, values) => {
-			if (!err) {
-				console.log('Received values of form: ', values);
-			}
-		});
-	};
-
-	handleChange = e => {
-		console.log('handleChange')
+	//* 计算属性 为了给select用 其实把逗号分隔的字符串变成数组
+	get namesList() {
+		// console.log('this.state.names', this.state.names)
+		return this.state.names.split(',').filter(v => v)
 	}
 
-	handleClick = e => {
-		console.log('handleClick')
-	}
-	renderInput = () => {
-		let test = <span type="user" onClick={this.handleClick} style={{ display: 'inline-block', backgroundColor: 'red', width: '12px', height: '12px', color: 'rgba(0,0,0,.25)' }} />
-		return <Input
-			suffix={test}
-			placeholder="Username"
-			onChange={this.handleChange}
-		/>
+	//* 把select选择的数组变成逗号分号的字符串 给state赋值
+	handleSelectChange = (value) => {
+		const arr = value.toString()
+		this.setState({
+			names: arr
+		})
 	}
 
 	render() {
-		const { getFieldDecorator, getFieldsError, getFieldError, isFieldTouched } = this.props.form;
-
-		// Only show error after a field is touched.
-		const usernameError = isFieldTouched('username') && getFieldError('username');
-		const passwordError = isFieldTouched('password') && getFieldError('password');
 
 		return (
-			<Form layout="inline" onSubmit={this.handleSubmit}>
-				<Form.Item validateStatus={usernameError ? 'error' : ''} help={usernameError || ''}>
-					{getFieldDecorator('username', {
-						rules: [{ required: true, message: 'Please input your username!' }],
-					})(
-						this.renderInput()
-					)}
-				</Form.Item>
-				<Form.Item validateStatus={passwordError ? 'error' : ''} help={passwordError || ''}>
-					{getFieldDecorator('password', {
-						rules: [{ required: true, message: 'Please input your Password!' }],
-					})(
-						<Input
-							prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
-							type="password"
-							placeholder="Password"
-						/>,
-					)}
-				</Form.Item>
-				<Form.Item>
-					<Button type="primary" htmlType="submit" disabled={hasErrors(getFieldsError())}>
-						Log in
-					</Button>
-				</Form.Item>
-			</Form>
-		);
+			<div>
+				< Select
+					mode="multiple"
+					style={{ width: '200px' }}
+					value={this.namesList}
+					initialValue={[]}
+					defaultValue={[]}
+					onChange={this.handleSelectChange}
+				>
+					<Option key={'zs'}>{'张三'}</Option>
+					<Option key={'ls'}>{'李四'}</Option>
+					<Option key={'ww'}>{'王五'}</Option>
+				</Select >
+			</div >
+		)
 	}
 }
 
-const WrappedHorizontalLoginForm = Form.create({ name: 'horizontal_login' })(HorizontalLoginForm);
-
-
-export default WrappedHorizontalLoginForm
+export default HorizontalLoginForm
