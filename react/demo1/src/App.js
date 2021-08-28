@@ -2,20 +2,39 @@
 import React from 'react';
 import 'antd/dist/antd.css';
 import './index.css';
-import { Select } from 'antd';
+import { Select, Button } from 'antd';
+import CustForm from './CustForm.js'
 const { Option } = Select;
 
 class HorizontalLoginForm extends React.Component {
 
 	state = {
 		// 从接口中取值
-		names: ''
+		names: '',
+		list: [{ 'note': '1', 'gender': '' }, { 'note': '', 'gender': 'male' }]
 	}
 
-	componentDidMount() {
-		setTimeout(() => {
-			this.setState({ names: 'zs,ls' })
-		}, 2000)
+	handleSubmit = () => {
+		const { list = [] } = this.state;
+		let formArr = list.map((item, i) => {
+			return this.refs['cform' + i]
+		})
+		// for (let i = 0; i < list.length; i++) {
+		// 	const form = this.refs['cform' + i]
+		// 	formArr.push(form)
+		// }
+		console.log(formArr)
+		for (let j = 0; j < formArr.length; j++) {
+			const cForm = formArr[j];
+			// cForm.resetFields()
+			console.log('getFieldsError', cForm.getFieldsError())
+			console.log('getFieldsValue', cForm.getFieldsValue())
+			// cForm.validateFields()
+			cForm.validateFields(['gender', 'note'], { force: true }, (error, value) => {
+				console.log(error, value)
+			})
+
+		}
 	}
 
 	//* 计算属性 为了给select用 其实把逗号分隔的字符串变成数组
@@ -36,18 +55,16 @@ class HorizontalLoginForm extends React.Component {
 
 		return (
 			<div>
-				< Select
-					mode="multiple"
-					style={{ width: '200px' }}
-					value={this.namesList}
-					initialValue={[]}
-					defaultValue={[]}
-					onChange={this.handleSelectChange}
-				>
-					<Option key={'zs'}>{'张三'}</Option>
-					<Option key={'ls'}>{'李四'}</Option>
-					<Option key={'ww'}>{'王五'}</Option>
-				</Select >
+				{
+					this.state.list.map((item, index) => {
+						return (
+							<CustForm ref={'cform' + index} key={index} obj={item}></CustForm>
+						)
+					})
+				}
+				<Button onClick={this.handleSubmit}>
+					Submit
+				</Button>
 			</div >
 		)
 	}

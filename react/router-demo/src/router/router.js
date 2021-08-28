@@ -19,7 +19,7 @@ let routes = [
 		}
 	},
 	{
-		path: ["/list", "list/:page"],
+		path: ["/list", "/list/:page"],
 		exact: true,
 		render(props) {
 			let { page = 1 } = props.match.params;
@@ -50,12 +50,12 @@ let navs = [
 		title: "关于"
 	},
 	{
-		to: "list",
+		to: "/list",
 		title: "课程列表",
 		isActive(url) {
 			let urlData = url.split("/")
-			const listHave = urlData.length === 3 && urlData[1] === "list" && urlData[2] > 0
-			if (url === 'list' || listHave) {
+			const listHave = urlData.length === 3 && urlData[1] === "list" && Number(urlData[2]) > 0
+			if (url === '/list' || listHave) {
 				return true
 			}
 			return false
