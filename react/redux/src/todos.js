@@ -1,8 +1,9 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
+import { connect } from 'react-redux'
 import Li from './li'
-function Todos() {
-	const data = useSelector(state => state)
+function Todos(props) {
+	// render() {
+	const data = props.data || []
 	return (
 		<ul id="todo-list">
 			{
@@ -10,6 +11,11 @@ function Todos() {
 			}
 		</ul>
 	)
+	// }
 }
-
-export default Todos
+function mapStateToProps(state) {
+	return {
+		data: state
+	}
+}
+export default connect(mapStateToProps)(Todos)
