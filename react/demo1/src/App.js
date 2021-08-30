@@ -2,70 +2,37 @@
 import React from 'react';
 import 'antd/dist/antd.css';
 import './index.css';
-import { Select, Button } from 'antd';
-import CustForm from './CustForm.js'
-const { Option } = Select;
+import CTab from './Tab'
 
 class HorizontalLoginForm extends React.Component {
 
 	state = {
 		// 从接口中取值
-		names: '',
-		list: [{ 'note': '1', 'gender': '' }, { 'note': '', 'gender': 'male' }]
+		tab: '1',
+		tab1: '1'
 	}
 
-	handleSubmit = () => {
-		const { list = [] } = this.state;
-		let formArr = list.map((item, i) => {
-			return this.refs['cform' + i]
-		})
-		// for (let i = 0; i < list.length; i++) {
-		// 	const form = this.refs['cform' + i]
-		// 	formArr.push(form)
-		// }
-		console.log(formArr)
-		for (let j = 0; j < formArr.length; j++) {
-			const cForm = formArr[j];
-			// cForm.resetFields()
-			console.log('getFieldsError', cForm.getFieldsError())
-			console.log('getFieldsValue', cForm.getFieldsValue())
-			// cForm.validateFields()
-			cForm.validateFields(['gender', 'note'], { force: true }, (error, value) => {
-				console.log(error, value)
-			})
-
-		}
+	callback = (val) => {
+		this.setState({ tab: val });
 	}
 
-	//* 计算属性 为了给select用 其实把逗号分隔的字符串变成数组
-	get namesList() {
-		// console.log('this.state.names', this.state.names)
-		return this.state.names.split(',').filter(v => v)
-	}
-
-	//* 把select选择的数组变成逗号分号的字符串 给state赋值
-	handleSelectChange = (value) => {
-		const arr = value.toString()
-		this.setState({
-			names: arr
-		})
+	callback1 = (val) => {
+		this.setState({ tab1: val });
 	}
 
 	render() {
-
+		const { tab, tab1 } = this.state
 		return (
 			<div>
+				<CTab tab={tab} test={() => { }} callback={this.callback}></CTab>
 				{
-					this.state.list.map((item, index) => {
+					[1].map(item => {
 						return (
-							<CustForm ref={'cform' + index} key={index} obj={item}></CustForm>
+							<CTab tab={tab1} test={() => { }} callback={this.callback1}></CTab>
 						)
 					})
 				}
-				<Button onClick={this.handleSubmit}>
-					Submit
-				</Button>
-			</div >
+			</div>
 		)
 	}
 }
