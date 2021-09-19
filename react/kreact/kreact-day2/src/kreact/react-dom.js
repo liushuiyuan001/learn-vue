@@ -30,13 +30,20 @@ function updateHostComponents(workInProgress) {
 
 	reconcileChildren(workInProgress, workInProgress.props.children)
 
-	console.log('workInProgess', workInProgress)
+	console.log('workInProgess--hostComponents', workInProgress)
 }
 
 function updateNode(node, props) {
 	Object.keys(props)
-		.filter(k => k !== 'children')
-		.forEach(k => node[k] = props[k])
+		.forEach(k => {
+			if (k === 'children') {
+				if (typeof props[k] === 'string') {
+					node.textContent = props[k]
+				}
+			} else {
+				node[k] = props[k]
+			}
+		})
 }
 
 function updateTextComponents(vnode) {
@@ -57,6 +64,9 @@ function updateClassComponents(vnode) {
 }
 
 function reconcileChildren(workInProgress, children) {
+	if (typeof children === 'string' || typeof children === 'number') {
+		return
+	}
 	const newChildren = Array.isArray(children) ? children : [children]
 	let previousNewFiber = null
 	for (let i = 0; i < newChildren.length; i++) {
@@ -95,6 +105,7 @@ let nextUnitOfWork = null;
 function performUnitOfWork(workInProgress) {
 	// 1. 执行任务
 	const { type } = workInProgress
+	console.log('workInProgress', workInProgress)
 	if (typeof type === 'string') {
 		// 原生标签节点
 		updateHostComponents(workInProgress)
@@ -115,19 +126,39 @@ function performUnitOfWork(workInProgress) {
 }
 
 function workLoop(IdleDeadline) {
-	console.log(nextUnitOfWork)
-	console.log(IdleDeadline.timeRemaining())
 	while (nextUnitOfWork && IdleDeadline.timeRemaining() > 0) {
 		// 执行任务 并且返回下一个执行任务
 		nextUnitOfWork = performUnitOfWork(nextUnitOfWork)
 	}
 
-	if (!nextUnitOfWork) {
-		// commitRoot()
+	if (!nextUnitOfWork && wipRoot) {
+		commitRoot()
 	}
 }
 
 requestIdleCallback(workLoop)
+
+function commitRoot() {
+	commitWork(wipRoot.child)
+	wipRoot = null
+}
+
+function commitWork(workInProgress) {
+	// 提交自己
+	if (!workInProgress) {
+		return
+	}
+
+	const parentNodeFiber = workInProgress.return
+	const parentNode = parentNodeFiber.stateNode
+	if (workInProgress.stateNode) {
+		parentNode.appendChild(workInProgress.stateNode)
+	}
+	// 提交兄弟节点
+	commitWork(workInProgress.sibling)
+	// 提交子节点
+	commitWork(workInProgress.child)
+}
 
 const Dom = {
 	render
