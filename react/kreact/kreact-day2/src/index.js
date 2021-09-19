@@ -24,7 +24,7 @@ const jsx = (
 		<h1>全栈</h1>
 		<a href="http://kaikeba.com">开课吧</a>
 		<FunctionComponent name="function" />
-		{/* <ClassComponent name="class" /> */}
+		<ClassComponent name="class" />
 	</div>
 )
 ReactDOM.render(

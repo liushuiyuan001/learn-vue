@@ -29,8 +29,6 @@ function updateHostComponents(workInProgress) {
 	}
 
 	reconcileChildren(workInProgress, workInProgress.props.children)
-
-	console.log('workInProgess--hostComponents', workInProgress)
 }
 
 function updateNode(node, props) {
@@ -46,21 +44,23 @@ function updateNode(node, props) {
 		})
 }
 
-function updateTextComponents(vnode) {
-	return document.createTextNode(vnode)
+function updateTextComponents(workInProgress) {
+	if (!workInProgress.stateNode) {
+		workInProgress.stateNode = document.createTextNode(workInProgress.props)
+	}
 }
 
-function updateFunctionComponents(vnode) {
-	const { type, props } = vnode
-	const vvnode = type(props)
-	return createNode(vvnode)
+function updateFunctionComponents(workInProgress) {
+	const { type, props } = workInProgress
+	const children = type(props)
+	reconcileChildren(workInProgress, children)
 }
 
-function updateClassComponents(vnode) {
-	const { type, props } = vnode
+function updateClassComponents(workInProgress) {
+	const { type, props } = workInProgress
 	const instance = new type(props)
-	const vvnode = instance.render()
-	return createNode(vvnode)
+	const children = instance.render()
+	reconcileChildren(workInProgress, children)
 }
 
 function reconcileChildren(workInProgress, children) {
@@ -80,6 +80,11 @@ function reconcileChildren(workInProgress, children) {
 			sibling: null,
 			return: workInProgress
 		}
+
+		if (typeof child === 'string') {
+			newFiber.props = child
+		}
+
 		if (i === 0) {
 			workInProgress.child = newFiber
 		} else {
@@ -109,6 +114,14 @@ function performUnitOfWork(workInProgress) {
 	if (typeof type === 'string') {
 		// 原生标签节点
 		updateHostComponents(workInProgress)
+	} else if (typeof type === 'function') {
+		if (type.prototype.isReactComponent) {
+			updateClassComponents(workInProgress)
+		} else {
+			updateFunctionComponents(workInProgress)
+		}
+	} else if (typeof type === 'undefined') {
+		updateTextComponents(workInProgress)
 	}
 
 	// 2. 返回下一个执行任务
@@ -149,8 +162,12 @@ function commitWork(workInProgress) {
 		return
 	}
 
-	const parentNodeFiber = workInProgress.return
-	const parentNode = parentNodeFiber.stateNode
+	let parentNodeFiber = workInProgress.return
+	// 父fiber一定有dom节点
+	while (!parentNodeFiber.stateNode) {
+		parentNodeFiber = parentNodeFiber.return
+	}
+	const parentNode = parentNodeFiber.stateNode //dom节点
 	if (workInProgress.stateNode) {
 		parentNode.appendChild(workInProgress.stateNode)
 	}
