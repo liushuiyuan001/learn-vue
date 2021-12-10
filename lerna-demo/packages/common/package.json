@@ -1,0 +1,32 @@
+{
+  "name": "@lerna-demo/common",
+  "version": "0.0.0",
+  "description": "> TODO: description",
+  "author": "Liu Shuiyuan <13783534092@sina.cn>",
+  "homepage": "https://github.com/liushuiyuan001/learn-vue#readme",
+  "license": "ISC",
+  "main": "lib/common.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "publishConfig": {
+    "registry": "http://registry.npm.taobao.org/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/liushuiyuan001/learn-vue.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "bugs": {
+    "url": "https://github.com/liushuiyuan001/learn-vue/issues"
+  },
+  "dependencies": {
+    "antd": "^3.10.10"
+  }
+}

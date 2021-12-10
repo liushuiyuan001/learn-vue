@@ -1,0 +1,13 @@
+{
+  "workspaces": [
+		"packages/*"
+  ],
+  "name": "lerna-demo",
+  "private": true,
+  "scripts": {
+	"start:aSite": "lerna --scope @lerna-demo/admin-site run start"
+  },
+  "devDependencies": {
+    "lerna": "^4.0.0"
+  }
+}
