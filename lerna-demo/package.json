@@ -1,13 +1,22 @@
 {
   "workspaces": [
-		"packages/*"
+    "packages/*"
   ],
   "name": "lerna-demo",
   "private": true,
   "scripts": {
-	"start:aSite": "lerna --scope @lerna-demo/admin-site run start"
+    "start:aSite": "lerna --scope @lerna-demo/admin-site run start",
+	"start:cSite": "lerna --scope @lerna-demo/customer-site run start",
+    "build:aSite": "lerna --scope @lerna-demo/admin-site run build",
+    "build:cSite": "lerna --scope @lerna-demo/customer-site run build",
+    "release": "lerna publish",
+	"clean": "lerna clean"
   },
   "devDependencies": {
     "lerna": "^4.0.0"
+  },
+  "dependencies": {
+    "babel-loader": "^8.2.3",
+    "babel-plugin-named-asset-import": "^0.3.7"
   }
 }
