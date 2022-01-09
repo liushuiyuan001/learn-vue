@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+</head>
+<body>
+	<ul>
+		<li>
+			<button onclick="handleClick(event)">1</button>
+		</li>
+		<li>
+			<button onclick="handleClick(event)">2</button>
+		</li>
+		<li>
+			<button onclick="handleClick(event)">3</button>
+		</li>
+		<li>
+			<button onclick="handleClick(event)">4</button>
+		</li>
+	</ul>
+	<script>
+		const dom = document.getElementsByTagName('ul')[0]
+		dom.addEventListener('click', function(e) {
+			const btn = e.target
+			// btn.parentNode.style.background = 'red'
+			// btn.parentNode.style = "background:red"
+			btn.parentNode.setAttribute('style',"background:red")
+		})
+
+		function handleClick(e) {
+			// const btn = e.target
+			// btn.parentNode.style.background = 'red'
+		}
+		// 
+	</script>
+</body>
+</html>

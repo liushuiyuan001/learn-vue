@@ -5,57 +5,125 @@ import './index.css';
 // import Child from './Child'
 
 
-const initState = {
-	count: 0
-}
+// const initState = {
+// 	count: 0
+// }
 
-const reducer = (state, action) => {
-	switch (action.type) {
-		case 'add':
-			return { count: state.count + 1 }
-		case 'decrement':
-			return { count: state.count - 1 }
-		default: return state
+// const reducer = (state, action) => {
+// 	switch (action.type) {
+// 		case 'add':
+// 			return { count: state.count + 1 }
+// 		case 'decrement':
+// 			return { count: state.count - 1 }
+// 		default: return state
+// 	}
+// }
+// const Child = memo((props) => {
+// 	console.log('child-render')
+// 	const [state, dispatch] = useReducer(reducer, initState)
+// 	return (
+// 		<>
+// 			<div>{props.render}</div>
+// 			<div>{state.count}</div>
+// 			<button onClick={() => dispatch({ type: 'add' })}>+</button>
+// 			<button onClick={() => dispatch({ type: 'decrement' })}>-</button>
+// 		</>
+// 	)
+// })
+
+// const App = (params) => {
+
+// 	const [count, setCount] = useState(0)
+// 	const [max, setMax] = useState(10)
+// 	const change = (c) => {
+// 		setCount(count + 1)
+// 	}
+
+// 	const render = useMemo(() => {
+// 		const list = []
+// 		for (let i = 0; i < max; i++) {
+// 			list.push(<div>{i}</div>)
+// 		}
+// 		return list
+// 	}, [max])
+// 	return (
+// 		<div>
+// 			<div>{count}</div>
+// 			<button onClick={change}>点击</button>
+// 			<Child render={render}></Child>
+// 		</div>
+// 	)
+// }
+// export default App
+
+class Li extends React.Component {
+	handleClick = (index) => {
+		this.props.handleClick(index)
+	}
+	handleChange = (e, index) => {
+		console.log(e, index)
+		this.props.handleChange(e.target.value, index)
+	}
+	render() {
+		return (
+			<>
+
+			</>
+		)
 	}
 }
-const Child = memo((props) => {
-	console.log('child-render')
-	const [state, dispatch] = useReducer(reducer, initState)
-	return (
-		<>
-			<div>{props.render}</div>
-			<div>{state.count}</div>
-			<button onClick={() => dispatch({ type: 'add' })}>+</button>
-			<button onClick={() => dispatch({ type: 'decrement' })}>-</button>
-		</>
-	)
-})
-
-const App = (params) => {
-
-	const [count, setCount] = useState(0)
-	const [max, setMax] = useState(10)
-	const change = (c) => {
-		setCount(count + 1)
+class App extends React.Component {
+	state = {
+		list: [{ id: 11, val: 11 }, { id: 12, val: 12 }, { id: 13, val: 13 }, { id: 14, val: 14 }, { id: 15, val: 15 }]
 	}
 
-	const render = useMemo(() => {
-		const list = []
-		for (let i = 0; i < max; i++) {
-			list.push(<div>{i}</div>)
-		}
-		return list
-	}, [max])
-	return (
-		<div>
-			<div>{count}</div>
-			<button onClick={change}>点击</button>
-			<Child render={render}></Child>
-		</div>
-	)
+	handleClick = (index) => {
+		const listOld = this.state.list
+		listOld.splice(index, 1)
+		this.setState({ list: listOld })
+	}
+
+	handleChange = (value, index) => {
+		const listOld = this.state.list
+		listOld[index] = value
+		this.setState({ list: listOld })
+	}
+
+	componentDidMount() {
+		const dom = document.getElementById('custom-input')
+		dom.addEventListener('compositionstart', e => {
+			console.log('compositionstart', e.data)
+		})
+		dom.addEventListener('compositionupdate', e => {
+			console.log('compositionupdate', e.data)
+		})
+		dom.addEventListener('compositionend', e => {
+			console.log('compositionend', e.data)
+		})
+
+	}
+	render() {
+		return (
+			<div>
+				<ul>
+					<input id="custom-input"></input>
+					{/* {this.state.list.map((item, index) => {
+						return (
+							<li key={index} data-list={item.val}>
+								<input defaultValue={item.val}></input>
+								<button onClick={() => this.handleClick(index)}>删除</button>
+							</li>
+						)
+
+						// < Li item = { item } index = { index } handleChange = { this.handleChange } handleClick = { this.handleClick } key = { index } ></>
+					})} */}
+				</ul>
+			</div >
+		)
+	}
 }
+
 export default App
-
 // class HorizontalLoginForm extends React.Component {
 // 	constructor(props) {
 // 		super(props);
