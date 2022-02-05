@@ -9,6 +9,9 @@ module.exports = {
 					lessOptions: {
 						modifyVars: { '@primary-color': 'red' },
 						javascriptEnabled: true,
+						globalVars: {
+							hack: `true; @import '${__dirname}/src/assets/style/variable.less';`
+						}
 					},
 				},
 			},

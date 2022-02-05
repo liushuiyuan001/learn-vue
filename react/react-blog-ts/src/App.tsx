@@ -1,16 +1,11 @@
 import "./App.less";
-import { Button } from "antd";
 import Child from "./Child";
-import CustomForm from "./CustomForm";
 import { Routes, Route, Link } from "react-router-dom";
 
 function App() {
   return (
     <div className="App">
-      <Button type="primary">Primary Button</Button>
       <Child name="props"></Child>
-	  <CustomForm></CustomForm>
-      <div className="custom text-3xl font-bold underline">自定义css变量</div>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="about" element={<About />} />
