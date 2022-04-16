@@ -1,0 +1,124 @@
+{
+    "vim.handleKeys": {
+        "<C-a>": false,
+        "<C-f>": false
+    },
+    "vim.leader": "<space>",
+    "vim.useCtrlKeys": true,
+    "vim.insertModeKeyBindings": [
+        {
+            "after": [
+                "<Esc>"
+            ],
+            "before": [
+                "z",
+                "z"
+            ]
+        }
+    ],
+    "vim.hlsearch": true,
+    "vim.normalModeKeyBindingsNonRecursive": [
+        {
+            "after": [
+                "d",
+                "i",
+                "w"
+            ],
+            "before": [
+                "<leader>",
+                "d"
+            ]
+        },
+        {
+            "after": [
+                "c",
+                "i",
+                "w"
+            ],
+            "before": [
+                "<leader>",
+                "c"
+            ]
+        },
+        {
+            "after": [
+                "y",
+                "y"
+            ],
+            "before": [
+                "Y"
+            ]
+        },
+        {
+            "after": [
+                "y",
+                "i",
+                "w"
+            ],
+            "before": [
+                "<leader>",
+                "y"
+            ]
+        },
+        {
+            "after": [
+                "v",
+                "i",
+                "w",
+                "p",
+                "v"
+            ],
+            "before": [
+                "<leader>",
+                "p"
+            ]
+        },
+        {
+            "after": [
+                "5",
+                "j"
+            ],
+            "before": [
+                "J"
+            ]
+        },
+        {
+            "after": [
+                "5",
+                "k"
+            ],
+            "before": [
+                "K"
+            ]
+        },
+        {
+            "after": [
+                "g",
+                "T"
+            ],
+            "before": [
+                "E"
+            ]
+        },
+        {
+            "after": [
+                "g",
+                "t"
+            ],
+            "before": [
+                "R"
+            ]
+        },
+        {
+            "commands": [
+                ":nohl"
+            ],
+            "before": [
+                "<C-n>"
+            ]
+        }
+    ],
+    "vim.incsearch": true,
+    "vim.useSystemClipboard": true,
+    "vim.easymotion": true
+}
