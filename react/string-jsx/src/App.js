@@ -1,5 +1,8 @@
 import { useState } from 'react'
 import JsxParser from 'react-jsx-parser'
+import * as Acron from 'acorn'
+import * as AcronJXS from 'acorn-jsx'
+
 import { Button } from 'antd'
 import 'antd/dist/antd.css'; // or 'antd/dist/antd.less'
 import './App.css';
@@ -12,6 +15,15 @@ function App() {
           foo: 'bar',
           type: 'primary'
   })
+
+  const testAcron = () => {
+    const Parse = Acron.Parser.extend(AcronJXS())
+    const ast = Parse.parse(jsx)
+    console.log('ast')
+    console.log(ast)
+  }
+
+  testAcron()
 
   return (
     <div>
