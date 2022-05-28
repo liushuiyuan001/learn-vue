@@ -1,49 +1,35 @@
-import { useState } from 'react'
-import JsxParser from 'react-jsx-parser'
-import * as Acron from 'acorn'
-import * as AcronJXS from 'acorn-jsx'
+import React, { useState } from 'react'
+import JsxParser from './JsxParser'
 
 import { Button } from 'antd'
 import 'antd/dist/antd.css'; // or 'antd/dist/antd.less'
 import './App.css';
 
 function App() {
-  console.log(Button)
-  const jsx = `<div>\n    <div onClick={myEventHandler}>{type}-{foo}</div>\n  </div>`
+
+  const jsx = `<div>\n    <Button onClick={myEventHandler} type={type}>{type}-{foo}</Button>\n  </div>`
 
   const [obj, setObj] = useState({       
-          foo: 'bar',
-          type: 'primary'
+      foo: 'bar',
+      type: 'primary'
   })
-
-  const testAcron = () => {
-    const Parse = Acron.Parser.extend(AcronJXS())
-    const ast = Parse.parse(jsx)
-    console.log('ast')
-    console.log(ast)
-  }
-
-  testAcron()
 
   return (
     <div>
       <div>123456</div>
       <JsxParser
-        blacklistedAttrs={[]}
+        jsx={jsx}
+        components={{ Button }}
         bindings={{
           ...obj,
           myEventHandler: (e) => {
             setObj({ 
               ...obj,
-              type: 'text'
+              type: 'danger'
             })
-            console.log('first', e)
           }
         }}
-        components={{ Button }}
-        jsx={jsx}
       />
-
     </div> 
   );
 }
