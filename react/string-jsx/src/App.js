@@ -7,11 +7,12 @@ import './App.css';
 
 function App() {
 
-  const jsx = `<div>\n    <Button onClick={myEventHandler} type={type}>{type}-{foo}</Button>\n  </div>`
+  const jsx = `<div>\n    <Button onClick={myEventHandler} type={type === 'danger' ? 'primary' : 'danger'} >{type}-{foo}-{show ? '1' : '0'}</Button>\n  </div>`
 
   const [obj, setObj] = useState({       
       foo: 'bar',
-      type: 'primary'
+      type: 'primary',
+      show: true,
   })
 
   return (
@@ -25,7 +26,8 @@ function App() {
           myEventHandler: (e) => {
             setObj({ 
               ...obj,
-              type: 'danger'
+              show: !obj.show,
+              type: !obj.show ? 'danger' : 'primary'
             })
           }
         }}

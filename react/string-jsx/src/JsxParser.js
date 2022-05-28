@@ -9,39 +9,77 @@ const JsxParser = (props) => {
     const ast = Parse.parse(jsx)
     const code = ast.body[0].expression
 
-    const astToJSX = (astCode) => {
+    const parseExpression = (node) => {
+        switch (node.type) {
+            case 'JSXElement':
+                return parseElement(node)
+            case 'ConditionalExpression':
+                return parseExpression(node.test) ? parseExpression(node.consequent) : parseExpression(node.alternate)
+            case 'BinaryExpression':
+                switch (node.operator) {
+                    case '-': return parseExpression(node.left) - parseExpression(node.right)
+                    case '!=': return parseExpression(node.left) != parseExpression(node.right)
+                    case '!==': return parseExpression(node.left) !== parseExpression(node.right)
+                    case '*': return parseExpression(node.left) * parseExpression(node.right)
+                    case '**': return parseExpression(node.left) ** parseExpression(node.right)
+                    case '/': return parseExpression(node.left) / parseExpression(node.right)
+                    case '%': return parseExpression(node.left) % parseExpression(node.right)
+                    case '+': return parseExpression(node.left) + parseExpression(node.right)
+                    case '<': return parseExpression(node.left) < parseExpression(node.right)
+                    case '<=': return parseExpression(node.left) <= parseExpression(node.right)
+                    case '==': return parseExpression(node.left) == parseExpression(node.right)
+                    case '===': return parseExpression(node.left) === parseExpression(node.right)
+                    case '>': return parseExpression(node.left) > parseExpression(node.right)
+                    case '>=': return parseExpression(node.left) >= parseExpression(node.right)
+                }
+                return undefined
+            case 'Literal':
+            case 'JSXText':
+            case 'JSXIdentifier':
+                return node.value 
+            case 'Identifier':
+                const n = node.name
+                if(n === 'type') {
+                    console.log(n)
+                    console.log(bindings[n])
+                }
+                return bindings[n]
+            case 'StringLiteral':
+                return node.value
+            case 'UnaryExpression':
+                switch (node.operator) {
+                    case '+': return node.argument.value
+                    case '-': return -node.argument.value
+                    case '!': return !node.argument.value
+                }
+                return undefined
+            case 'JSXExpressionContainer':
+                return parseExpression(node.expression)
+        }
+    }
 
-        if(astCode.type === 'JSXExpressionContainer') {
-            const n = astCode.expression.name
-            return bindings[n] 
-        }
-        if(astCode.type === 'JSXText') {
-            return astCode.value
-        }
-    
-        const tagName = astCode.openingElement.name.name
+    const parseElement = (node) => {
+
+        const tagName = node.openingElement.name.name
         const tag = components[tagName] || tagName 
     
         const myProps = {}
-        const attribute = astCode.openingElement.attributes
+        const attribute = node.openingElement.attributes
+
         attribute.forEach(n => {
-            if(n.value.type === 'JSXExpressionContainer') {
-                myProps[n.name.name] = bindings[n.value.expression.name] || n.value.expression.name
-            } else {
-                myProps[n.name.name] = bindings[n.value.value] || n.value.value
-            }
+            myProps[n.name.name] = parseExpression(n.value)
         })
-    
-        const children = astCode.children.map(node => {
-            return astToJSX(node)
+
+        const children = node.children.map(node => {
+            return parseExpression(node)
         })
-    
+
         return React.createElement(tag,myProps,...children)
     }
 
     return (
         <>
-            {astToJSX(code)}
+            {parseExpression(code)}
         </>
     )
 }
